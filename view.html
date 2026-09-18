@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📆 Year Grid Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        background: #0a0e14;
+        color: #e6edf3;
+        padding: 24px 0 40px;
+        overflow-x: hidden;
+      }
+
+      /* ----- App Header ----- */
+      .app-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .app-title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .app-title .logo {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        box-shadow: 0 8px 24px -4px rgba(139, 92, 246, 0.5);
+      }
+
+      .app-title h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #ffffff, #b4c0d3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.1;
+      }
+
+      .app-title .subtitle {
+        font-size: 0.7rem;
+        color: #6e7b91;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+
+      .year-controls-wrap {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: #12171f;
+        border: 1px solid #1e2632;
+        border-radius: 60px;
+        padding: 6px 6px 6px 20px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      }
+
+      .year-controls-wrap .current-year {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #e6edf3;
+        letter-spacing: -0.01em;
+        min-width: 46px;
+        text-align: center;
+      }
+
+      .year-nav {
+        display: flex;
+        gap: 4px;
+      }
+
+      .year-nav button {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: none;
+        background: #1a2029;
+        color: #c9d1d9;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 300;
+      }
+
+      .year-nav button:hover {
+        background: #6366f1;
+        color: white;
+        transform: scale(1.08);
+      }
+
+      .year-nav button:active {
+        transform: scale(0.95);
+      }
+
+      .today-button {
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: white;
+        border: none;
+        padding: 10px 22px;
+        border-radius: 60px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      .today-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(139, 92, 246, 0.6);
+      }
+
+      .today-button:active {
+        transform: scale(0.96);
+      }
+
+      /* ----- Scroll hint ----- */
+      .scroll-hint {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 28px;
+        margin-bottom: 12px;
+        font-size: 0.72rem;
+        color: #4a5568;
+        font-weight: 500;
+      }
+
+      .scroll-hint span {
+        display: inline-block;
+        animation: slideX 2s infinite;
+      }
+
+      @keyframes slideX {
+        0%, 100% { transform: translateX(0); opacity: 0.6; }
+        50% { transform: translateX(6px); opacity: 1; }
+      }
+
+      /* ----- Main scroll wrapper ----- */
+      .calendar-scroll {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-behavior: smooth;
+        cursor: grab;
+        scrollbar-width: thin;
+        scrollbar-color: #1e2632 #0a0e14;
+        padding-bottom: 14px;
+      }
+
+      .calendar-scroll:active {
+        cursor: grabbing;
+      }
+
+      .calendar-scroll::-webkit-scrollbar {
+        height: 10px;
+      }
+      .calendar-scroll::-webkit-scrollbar-track {
+        background: #0f1419;
+        border-radius: 10px;
+        margin: 0 28px;
+      }
+      .calendar-scroll::-webkit-scrollbar-thumb {
+        background: #1e2632;
+        border-radius: 10px;
+        border: 2px solid #0f1419;
+      }
+      .calendar-scroll::-webkit-scrollbar-thumb:hover {
+        background: #6366f1;
+      }
+
+      /* ----- The full year grid ----- */
+      .year-grid {
+        display: flex;
+        min-width: max-content;
+        padding: 0 28px;
+      }
+
+      /* ----- Weekday labels (fixed left column) ----- */
+      .weekday-labels {
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        background: #0a0e14;
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        padding-right: 4px;
+        border-right: 1px solid #1a2029;
+      }
+
+      .weekday-labels .spacer {
+        height: 42px;
+      }
+
+      .weekday-labels .label-cell {
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 10px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #6e7b91;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .weekday-labels .label-cell.weekend {
+        color: #4a5568;
+      }
+
+      /* ----- The main grid of weeks ----- */
+      .weeks-grid {
+        display: flex;
+        flex: 0 0 auto;
+      }
+
+      /* ----- Month marker ----- */
+      .month-marker-header {
+        height: 42px;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #a855f7;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        white-space: nowrap;
+        border-bottom: 1px solid #1a2029;
+        position: relative;
+        box-sizing: border-box;
+      }
+
+      .month-marker-header::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #a855f7, #6366f1);
+        width: 100%;
+      }
+
+      /* ----- Continuous week columns ----- */
+      .week-col {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        border-right: 1px solid #141a22;
+        position: relative;
+      }
+
+      .week-col:last-child {
+        border-right: none;
+      }
+
+      /* ----- Single day cell ----- */
+      .day-cell {
+        width: 44px;
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #c9d1d9;
+        font-variant-numeric: tabular-nums;
+        transition: background 0.15s, color 0.15s;
+        cursor: pointer;
+        position: relative;
+        border-bottom: 1px solid #141a22;
+      }
+
+      .day-cell:last-child {
+        border-bottom: none;
+      }
+
+      .day-cell.empty {
+        color: #2a3340;
+        cursor: default;
+        background: rgba(20, 26, 34, 0.25);
+      }
+
+      .day-cell.empty:hover {
+        background: rgba(20, 26, 34, 0.25);
+      }
+
+      .day-cell:not(.empty):hover {
+        background: #1a2432;
+        color: #ffffff;
+      }
+
+      .day-cell.weekend {
+        color: #6e7b91;
+      }
+
+      .day-cell.weekend:not(.empty):hover {
+        color: #ffffff;
+      }
+
+      .day-cell.past {
+        color: #3d4451;
+      }
+
+      .day-cell.past:hover {
+        color: #8b949e;
+      }
+
+      .day-cell.today {
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: #ffffff;
+        font-weight: 800;
+        box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4), 0 0 20px rgba(139, 92, 246, 0.5);
+        border-radius: 8px;
+        z-index: 2;
+        transform: scale(1.05);
+      }
+
+      .day-cell.today:hover {
+        background: linear-gradient(135deg, #7c7ff2, #b96bff);
+        color: #ffffff;
+      }
+
+      .day-cell.tint-a {
+        background: rgba(30, 38, 50, 0.15);
+      }
+      .day-cell.tint-a:not(.empty):hover {
+        background: #1a2432;
+      }
+
+      /* ----- Legend ----- */
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        padding: 20px 28px 0;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.75rem;
+        color: #6e7b91;
+        font-weight: 500;
+      }
+
+      .legend-swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+      }
+
+      .legend-swatch.today-swatch {
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+      }
+
+      .legend-swatch.weekend-swatch {
+        background: #1e2632;
+      }
+
+      .legend-swatch.month-swatch {
+        width: 4px;
+        height: 16px;
+        background: #a855f7;
+        border-radius: 2px;
+      }
+
+      /* ----- Responsive ----- */
+      @media (max-width: 768px) {
+        body {
+          padding: 16px 0 30px;
+        }
+
+        .app-header {
+          padding: 0 16px;
+          margin-bottom: 18px;
+        }
+
+        .app-title h1 {
+          font-size: 1.15rem;
+        }
+
+        .app-title .logo {
+          width: 38px;
+          height: 38px;
+          font-size: 18px;
+          border-radius: 11px;
+        }
+
+        .app-title .subtitle {
+          font-size: 0.6rem;
+        }
+
+        .year-controls-wrap {
+          padding: 5px 5px 5px 16px;
+        }
+
+        .year-controls-wrap .current-year {
+          font-size: 0.95rem;
+        }
+
+        .year-nav button {
+          width: 30px;
+          height: 30px;
+          font-size: 14px;
+        }
+
+        .today-button {
+          padding: 8px 18px;
+          font-size: 0.72rem;
+        }
+
+        .scroll-hint {
+          padding: 0 16px;
+          font-size: 0.66rem;
+        }
+
+        .year-grid {
+          padding: 0 16px;
+        }
+
+        .calendar-scroll::-webkit-scrollbar-track {
+          margin: 0 16px;
+        }
+
+        .weekday-labels .spacer {
+          height: 36px;
+        }
+
+        .weekday-labels .label-cell {
+          height: 52px;
+          font-size: 0.6rem;
+          padding-right: 8px;
+        }
+
+        .month-marker-header {
+          height: 36px;
+          font-size: 0.72rem;
+          padding-left: 8px;
+        }
+
+        .day-cell {
+          width: 38px;
+          height: 52px;
+          font-size: 0.78rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .app-header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 12px;
+        }
+
+        .app-title {
+          justify-content: flex-start;
+        }
+
+        .year-controls-wrap {
+          align-self: flex-end;
+        }
+
+        .today-button {
+          align-self: stretch;
+          text-align: center;
+        }
+
+        .weekday-labels .spacer {
+          height: 32px;
+        }
+
+        .weekday-labels .label-cell {
+          height: 46px;
+          font-size: 0.55rem;
+          padding-right: 6px;
+        }
+
+        .month-marker-header {
+          height: 32px;
+          font-size: 0.65rem;
+          letter-spacing: 0.12em;
+          padding-left: 6px;
+        }
+
+        .day-cell {
+          width: 34px;
+          height: 46px;
+          font-size: 0.72rem;
+        }
+
+        .legend {
+          gap: 14px;
+          padding: 16px 16px 0;
+        }
+
+        .legend-item {
+          font-size: 0.68rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-title">
+        <div class="logo">📆</div>
+        <div>
+          <h1>Year Grid</h1>
+          <div class="subtitle">Continuous Months</div>
+        </div>
+      </div>
+
+      <div class="year-controls-wrap">
+        <span class="current-year" id="displayYear">2026</span>
+        <div class="year-nav">
+          <button id="prevYear" aria-label="Previous year">‹</button>
+          <button id="nextYear" aria-label="Next year">›</button>
+        </div>
+      </div>
+
+      <button class="today-button" id="jumpTodayBtn">📍 Jump to Today</button>
+    </header>
+
+    <!-- Scroll hint -->
+    <div class="scroll-hint">
+      <span>⟷</span> Scroll horizontally to travel through the year
+    </div>
+
+    <!-- Main calendar scroll wrapper -->
+    <div class="calendar-scroll" id="calendarScroll">
+      <div class="year-grid" id="yearGrid">
+
+        <!-- Weekday labels (sticky left) -->
+        <div class="weekday-labels">
+          <div class="spacer"></div>
+          <div class="label-cell">Mon</div>
+          <div class="label-cell">Tue</div>
+          <div class="label-cell">Wed</div>
+          <div class="label-cell">Thu</div>
+          <div class="label-cell">Fri</div>
+          <div class="label-cell weekend">Sat</div>
+          <div class="label-cell weekend">Sun</div>
+        </div>
+
+        <!-- Months will be generated here -->
+        <div class="weeks-grid" id="weeksGrid"></div>
+
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-swatch today-swatch"></div>
+        <span>Today</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch weekend-swatch"></div>
+        <span>Weekend</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch month-swatch"></div>
+        <span>Month</span>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const weeksGrid = document.getElementById("weeksGrid");
+        const calendarScroll = document.getElementById("calendarScroll");
+        const displayYear = document.getElementById("displayYear");
+        const prevYear = document.getElementById("prevYear");
+        const nextYear = document.getElementById("nextYear");
+        const jumpTodayBtn = document.getElementById("jumpTodayBtn");
+
+        const MONTHS = [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+        // Stores computed layout info so we can recompute on resize
+        let layoutInfo = null;
+
+        let currentYear = new Date().getFullYear();
+
+        // Reads the actual rendered width of a day cell (respects CSS media queries)
+        function getDayCellWidth() {
+          const tempCell = document.createElement("div");
+          tempCell.className = "day-cell";
+          tempCell.style.visibility = "hidden";
+          tempCell.style.position = "absolute";
+          tempCell.style.pointerEvents = "none";
+          document.body.appendChild(tempCell);
+          const width = tempCell.getBoundingClientRect().width;
+          document.body.removeChild(tempCell);
+          return width;
+        }
+
+        // Computes all the layout info for a given year:
+        // - flattened days array
+        // - month start positions (by week index)
+        // - how many weeks each month spans
+        function computeLayout(year) {
+          const startOfYear = new Date(year, 0, 1);
+          const endOfYear = new Date(year, 11, 31);
+
+          // Monday-first index of Jan 1: 0 = Monday ... 6 = Sunday
+          const startOffset = (startOfYear.getDay() + 6) % 7;
+
+          const days = [];
+
+          // Leading filler for the first partial week
+          for (let i = 0; i < startOffset; i++) {
+            days.push({ empty: true, date: null, month: 0, day: 0 });
+          }
+
+          // Every real day of the year
+          let cursor = new Date(year, 0, 1);
+          while (cursor <= endOfYear) {
+            days.push({
+              empty: false,
+              date: new Date(cursor),
+              month: cursor.getMonth(),
+              day: cursor.getDate(),
+            });
+            cursor.setDate(cursor.getDate() + 1);
+          }
+
+          // Trailing filler to complete the final week
+          while (days.length % 7 !== 0) {
+            days.push({ empty: true, date: null, month: 11, day: 0 });
+          }
+
+          const totalWeeks = days.length / 7;
+
+          // Where does each month start?
+          const monthStartInfo = {};
+          for (let i = 0; i < days.length; i++) {
+            const d = days[i];
+            if (!d.empty && d.day === 1) {
+              monthStartInfo[d.month] = { weekIndex: Math.floor(i / 7) };
+            }
+          }
+
+          const monthOrder = [];
+          for (let m = 0; m < 12; m++) {
+            if (monthStartInfo[m] !== undefined) monthOrder.push(m);
+          }
+
+          // How many weeks does each month visually span?
+          const monthWeeks = new Array(12).fill(0);
+          for (let i = 0; i < monthOrder.length; i++) {
+            const m = monthOrder[i];
+            const startWeek = monthStartInfo[m].weekIndex;
+            const endWeek =
+              i + 1 < monthOrder.length
+                ? monthStartInfo[monthOrder[i + 1]].weekIndex
+                : totalWeeks;
+            monthWeeks[m] = endWeek - startWeek;
+          }
+
+          return { days, totalWeeks, monthOrder, monthWeeks, startOffset };
+        }
+
+        function renderYear() {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const todayYear = today.getFullYear();
+          const todayMonth = today.getMonth();
+          const todayDate = today.getDate();
+
+          displayYear.textContent = currentYear;
+          weeksGrid.innerHTML = "";
+
+          // Compute all layout info for this year
+          const info = computeLayout(currentYear);
+          layoutInfo = info;
+
+          const { days, totalWeeks, monthOrder, monthWeeks } = info;
+
+          const fragment = document.createDocumentFragment();
+
+          // ----- Build the week columns -----
+          const weeksRow = document.createElement("div");
+          weeksRow.className = "weeks-row";
+          weeksRow.style.display = "flex";
+
+          for (let w = 0; w < totalWeeks; w++) {
+            const weekCol = document.createElement("div");
+            weekCol.className = "week-col";
+
+            for (let d = 0; d < 7; d++) {
+              const dayInfo = days[w * 7 + d];
+              const cell = document.createElement("div");
+              cell.className = "day-cell";
+
+              if (dayInfo.empty) {
+                cell.classList.add("empty");
+                cell.textContent = "";
+              } else {
+                cell.textContent = dayInfo.day;
+
+                // Weekend (row d: 0=Mon ... 5=Sat, 6=Sun)
+                if (d === 5 || d === 6) cell.classList.add("weekend");
+
+                // Past / Today
+                if (dayInfo.date < today) {
+                  cell.classList.add("past");
+                } else if (
+                  currentYear === todayYear &&
+                  dayInfo.month === todayMonth &&
+                  dayInfo.day === todayDate
+                ) {
+                  cell.classList.add("today");
+                  cell.dataset.today = "true";
+                }
+
+                // Alternate month tint
+                if (dayInfo.month % 2 === 1) cell.classList.add("tint-a");
+              }
+
+              weekCol.appendChild(cell);
+            }
+
+            weeksRow.appendChild(weekCol);
+          }
+
+          // ----- Build the month header row -----
+          const monthHeaderRow = document.createElement("div");
+          monthHeaderRow.className = "month-header-row";
+          monthHeaderRow.style.display = "flex";
+
+          for (let i = 0; i < monthOrder.length; i++) {
+            const m = monthOrder[i];
+            const weeksSpan = monthWeeks[m];
+
+            const header = document.createElement("div");
+            header.className = "month-marker-header";
+            header.textContent = MONTHS[m];
+            // Initial width uses 44 as placeholder — corrected on next frame
+            header.style.width = weeksSpan * 44 + "px";
+            header.style.flex = "0 0 auto";
+            header.style.boxSizing = "border-box";
+            header.dataset.month = m;
+            header.dataset.weeksSpan = weeksSpan;
+            monthHeaderRow.appendChild(header);
+          }
+
+          // ----- Assemble -----
+          const gridWrapper = document.createElement("div");
+          gridWrapper.style.display = "flex";
+          gridWrapper.style.flexDirection = "column";
+
+          gridWrapper.appendChild(monthHeaderRow);
+          gridWrapper.appendChild(weeksRow);
+          fragment.appendChild(gridWrapper);
+
+          weeksGrid.appendChild(fragment);
+
+          // Correct widths after layout & scroll to today
+          requestAnimationFrame(() => {
+            syncMonthHeaderWidths();
+
+            // Auto-scroll to today (only if viewing the current year)
+            if (currentYear === todayYear) {
+              const todayCell = weeksGrid.querySelector(".day-cell.today");
+              if (todayCell) {
+                const rect = todayCell.getBoundingClientRect();
+                const scrollRect = calendarScroll.getBoundingClientRect();
+                const offset =
+                  rect.left - scrollRect.left + calendarScroll.scrollLeft
+                  - calendarScroll.clientWidth / 2 + rect.width / 2;
+                calendarScroll.scrollLeft = offset;
+              }
+            } else {
+              // For other years, start from January
+              calendarScroll.scrollLeft = 0;
+            }
+          });
+        }
+
+        // Recomputes and applies month header widths using real cell width
+        function syncMonthHeaderWidths() {
+          if (!layoutInfo) return;
+          const headers = weeksGrid.querySelectorAll(".month-marker-header");
+          if (!headers.length) return;
+
+          const actualCellWidth = getDayCellWidth();
+
+          headers.forEach((h) => {
+            const weeksSpan = Number(h.dataset.weeksSpan);
+            h.style.width = weeksSpan * actualCellWidth + "px";
+          });
+        }
+
+        // ----- Year navigation -----
+        prevYear.addEventListener("click", () => {
+          currentYear--;
+          renderYear();
+        });
+
+        nextYear.addEventListener("click", () => {
+          currentYear++;
+          renderYear();
+        });
+
+        jumpTodayBtn.addEventListener("click", () => {
+          // Reset to current year, then scroll to today
+          currentYear = new Date().getFullYear();
+          renderYear();
+        });
+
+        // ----- Drag to scroll with mouse -----
+        let isDown = false;
+        let startX = 0;
+        let startScrollLeft = 0;
+
+        calendarScroll.addEventListener("mousedown", (e) => {
+          isDown = true;
+          calendarScroll.style.cursor = "grabbing";
+          startX = e.pageX;
+          startScrollLeft = calendarScroll.scrollLeft;
+        });
+
+        window.addEventListener("mouseup", () => {
+          isDown = false;
+          calendarScroll.style.cursor = "grab";
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const walk = (e.pageX - startX) * 1.4;
+          calendarScroll.scrollLeft = startScrollLeft - walk;
+        });
+
+        // ----- Resize: recalculate month header widths -----
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(syncMonthHeaderWidths, 120);
+        });
+
+        // ----- Initial render -----
+        renderYear();
+      })();
+    </script>
+  </body>
+</html>
