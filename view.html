@@ -19,9 +19,13 @@
 
       body {
         min-height: 100vh;
-        font-family: "Inter", system-ui, -apple-system, sans-serif;
-        background: #0a0e14;
-        color: #e6edf3;
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: linear-gradient(145deg, #f8fafc 0%, #eef2f7 100%);
+        color: #1e293b;
         padding: 24px 0 40px;
         overflow-x: hidden;
       }
@@ -52,14 +56,14 @@
         align-items: center;
         justify-content: center;
         font-size: 22px;
-        box-shadow: 0 8px 24px -4px rgba(139, 92, 246, 0.5);
+        box-shadow: 0 8px 24px -4px rgba(139, 92, 246, 0.35);
       }
 
       .app-title h1 {
         font-size: 1.4rem;
         font-weight: 700;
         letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #ffffff, #b4c0d3);
+        background: linear-gradient(135deg, #1e293b, #475569);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -68,7 +72,7 @@
 
       .app-title .subtitle {
         font-size: 0.7rem;
-        color: #6e7b91;
+        color: #94a3b8;
         font-weight: 500;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -79,17 +83,17 @@
         display: flex;
         align-items: center;
         gap: 14px;
-        background: #12171f;
-        border: 1px solid #1e2632;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 60px;
         padding: 6px 6px 6px 20px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
       }
 
       .year-controls-wrap .current-year {
         font-size: 1.05rem;
         font-weight: 700;
-        color: #e6edf3;
+        color: #1e293b;
         letter-spacing: -0.01em;
         min-width: 46px;
         text-align: center;
@@ -105,15 +109,15 @@
         height: 34px;
         border-radius: 50%;
         border: none;
-        background: #1a2029;
-        color: #c9d1d9;
+        background: #f1f5f9;
+        color: #475569;
         font-size: 16px;
         cursor: pointer;
         transition: 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 300;
+        font-weight: 400;
       }
 
       .year-nav button:hover {
@@ -136,14 +140,14 @@
         font-weight: 700;
         cursor: pointer;
         transition: 0.2s;
-        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
         letter-spacing: 0.02em;
         white-space: nowrap;
       }
 
       .today-button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(139, 92, 246, 0.6);
+        box-shadow: 0 8px 22px rgba(139, 92, 246, 0.5);
       }
 
       .today-button:active {
@@ -158,7 +162,7 @@
         padding: 0 28px;
         margin-bottom: 12px;
         font-size: 0.72rem;
-        color: #4a5568;
+        color: #94a3b8;
         font-weight: 500;
       }
 
@@ -168,8 +172,15 @@
       }
 
       @keyframes slideX {
-        0%, 100% { transform: translateX(0); opacity: 0.6; }
-        50% { transform: translateX(6px); opacity: 1; }
+        0%,
+        100% {
+          transform: translateX(0);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateX(6px);
+          opacity: 1;
+        }
       }
 
       /* ----- Main scroll wrapper ----- */
@@ -179,7 +190,7 @@
         scroll-behavior: smooth;
         cursor: grab;
         scrollbar-width: thin;
-        scrollbar-color: #1e2632 #0a0e14;
+        scrollbar-color: #cbd5e1 #f1f5f9;
         padding-bottom: 14px;
       }
 
@@ -191,14 +202,14 @@
         height: 10px;
       }
       .calendar-scroll::-webkit-scrollbar-track {
-        background: #0f1419;
+        background: #f1f5f9;
         border-radius: 10px;
         margin: 0 28px;
       }
       .calendar-scroll::-webkit-scrollbar-thumb {
-        background: #1e2632;
+        background: #cbd5e1;
         border-radius: 10px;
-        border: 2px solid #0f1419;
+        border: 2px solid #f1f5f9;
       }
       .calendar-scroll::-webkit-scrollbar-thumb:hover {
         background: #6366f1;
@@ -216,16 +227,19 @@
         position: sticky;
         left: 0;
         z-index: 5;
-        background: #0a0e14;
+        background: linear-gradient(145deg, #f8fafc 0%, #eef2f7 100%);
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        padding-right: 4px;
-        border-right: 1px solid #1a2029;
+        padding-right: 12px;
+        padding-left: 6px;
+        /* Extra breathing room on the left when sticky */
+        margin-right: 6px;
       }
 
       .weekday-labels .spacer {
         height: 42px;
+        margin-bottom: 8px;
       }
 
       .weekday-labels .label-cell {
@@ -233,16 +247,18 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        padding-right: 10px;
+        padding-left: 8px;
+        padding-right: 14px;
         font-size: 0.68rem;
         font-weight: 700;
-        color: #6e7b91;
+        color: #64748b;
         text-transform: uppercase;
         letter-spacing: 0.1em;
+        margin-bottom: 1px;
       }
 
       .weekday-labels .label-cell.weekend {
-        color: #4a5568;
+        color: #94a3b8;
       }
 
       /* ----- The main grid of weeks ----- */
@@ -259,36 +275,43 @@
         padding-left: 10px;
         font-size: 0.82rem;
         font-weight: 800;
-        color: #a855f7;
+        color: #7c3aed;
         text-transform: uppercase;
         letter-spacing: 0.16em;
         white-space: nowrap;
-        border-bottom: 1px solid #1a2029;
         position: relative;
         box-sizing: border-box;
+        margin-bottom: 8px;
       }
 
       .month-marker-header::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -1px;
         left: 0;
         height: 2px;
         background: linear-gradient(90deg, #a855f7, #6366f1);
         width: 100%;
+        border-radius: 2px;
       }
 
-      /* ----- Continuous week columns ----- */
+      /* ----- Week columns with 1px gap ----- */
+      .weeks-row {
+        display: flex;
+        gap: 1px;
+        background: #e2e8f0;
+        padding: 1px;
+        border-radius: 6px;
+      }
+
       .week-col {
         display: flex;
         flex-direction: column;
         flex: 0 0 auto;
-        border-right: 1px solid #141a22;
-        position: relative;
-      }
-
-      .week-col:last-child {
-        border-right: none;
+        gap: 1px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        overflow: hidden;
       }
 
       /* ----- Single day cell ----- */
@@ -300,57 +323,61 @@
         justify-content: center;
         font-size: 0.88rem;
         font-weight: 600;
-        color: #c9d1d9;
+        color: #334155;
         font-variant-numeric: tabular-nums;
-        transition: background 0.15s, color 0.15s;
+        transition:
+          background 0.15s,
+          color 0.15s;
         cursor: pointer;
         position: relative;
-        border-bottom: 1px solid #141a22;
+        background: #ffffff;
       }
 
-      .day-cell:last-child {
-        border-bottom: none;
-      }
-
+      /* Empty cell — same background as others but muted number */
       .day-cell.empty {
-        color: #2a3340;
+        background: #ffffff;
+        color: #e2e8f0;
         cursor: default;
-        background: rgba(20, 26, 34, 0.25);
       }
 
       .day-cell.empty:hover {
-        background: rgba(20, 26, 34, 0.25);
+        background: #ffffff;
+        color: #e2e8f0;
       }
 
+      /* All real days — same base style, no disabled look */
       .day-cell:not(.empty):hover {
-        background: #1a2432;
-        color: #ffffff;
+        background: #f1f5f9;
+        color: #0f172a;
       }
 
+      /* Weekend — same background, just slightly muted number */
       .day-cell.weekend {
-        color: #6e7b91;
+        color: #64748b;
       }
 
       .day-cell.weekend:not(.empty):hover {
-        color: #ffffff;
+        color: #334155;
+        background: #f1f5f9;
       }
 
+      /* Past days — same neutral look */
       .day-cell.past {
-        color: #3d4451;
+        color: #334155;
       }
 
       .day-cell.past:hover {
-        color: #8b949e;
+        color: #0f172a;
+        background: #f1f5f9;
       }
 
+      /* Today — solid active background only, no shadows/blur/scale */
       .day-cell.today {
         background: linear-gradient(135deg, #6366f1, #a855f7);
         color: #ffffff;
         font-weight: 800;
-        box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.4), 0 0 20px rgba(139, 92, 246, 0.5);
         border-radius: 8px;
         z-index: 2;
-        transform: scale(1.05);
       }
 
       .day-cell.today:hover {
@@ -358,11 +385,12 @@
         color: #ffffff;
       }
 
+      /* Uniform background — no odd-month tinting */
       .day-cell.tint-a {
-        background: rgba(30, 38, 50, 0.15);
+        background: #ffffff;
       }
       .day-cell.tint-a:not(.empty):hover {
-        background: #1a2432;
+        background: #f1f5f9;
       }
 
       /* ----- Legend ----- */
@@ -379,7 +407,7 @@
         align-items: center;
         gap: 8px;
         font-size: 0.75rem;
-        color: #6e7b91;
+        color: #64748b;
         font-weight: 500;
       }
 
@@ -391,11 +419,11 @@
 
       .legend-swatch.today-swatch {
         background: linear-gradient(135deg, #6366f1, #a855f7);
-        box-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
       }
 
       .legend-swatch.weekend-swatch {
-        background: #1e2632;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
       }
 
       .legend-swatch.month-swatch {
@@ -463,6 +491,12 @@
           margin: 0 16px;
         }
 
+        .weekday-labels {
+          padding-right: 10px;
+          padding-left: 4px;
+          margin-right: 4px;
+        }
+
         .weekday-labels .spacer {
           height: 36px;
         }
@@ -470,7 +504,8 @@
         .weekday-labels .label-cell {
           height: 52px;
           font-size: 0.6rem;
-          padding-right: 8px;
+          padding-left: 6px;
+          padding-right: 12px;
         }
 
         .month-marker-header {
@@ -506,6 +541,12 @@
           text-align: center;
         }
 
+        .weekday-labels {
+          padding-right: 8px;
+          padding-left: 2px;
+          margin-right: 2px;
+        }
+
         .weekday-labels .spacer {
           height: 32px;
         }
@@ -513,7 +554,8 @@
         .weekday-labels .label-cell {
           height: 46px;
           font-size: 0.55rem;
-          padding-right: 6px;
+          padding-left: 4px;
+          padding-right: 10px;
         }
 
         .month-marker-header {
@@ -570,7 +612,6 @@
     <!-- Main calendar scroll wrapper -->
     <div class="calendar-scroll" id="calendarScroll">
       <div class="year-grid" id="yearGrid">
-
         <!-- Weekday labels (sticky left) -->
         <div class="weekday-labels">
           <div class="spacer"></div>
@@ -585,7 +626,6 @@
 
         <!-- Months will be generated here -->
         <div class="weeks-grid" id="weeksGrid"></div>
-
       </div>
     </div>
 
@@ -615,16 +655,23 @@
         const jumpTodayBtn = document.getElementById("jumpTodayBtn");
 
         const MONTHS = [
-          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
         ];
 
-        // Stores computed layout info so we can recompute on resize
         let layoutInfo = null;
-
         let currentYear = new Date().getFullYear();
 
-        // Reads the actual rendered width of a day cell (respects CSS media queries)
         function getDayCellWidth() {
           const tempCell = document.createElement("div");
           tempCell.className = "day-cell";
@@ -637,25 +684,17 @@
           return width;
         }
 
-        // Computes all the layout info for a given year:
-        // - flattened days array
-        // - month start positions (by week index)
-        // - how many weeks each month spans
         function computeLayout(year) {
           const startOfYear = new Date(year, 0, 1);
           const endOfYear = new Date(year, 11, 31);
-
-          // Monday-first index of Jan 1: 0 = Monday ... 6 = Sunday
           const startOffset = (startOfYear.getDay() + 6) % 7;
 
           const days = [];
 
-          // Leading filler for the first partial week
           for (let i = 0; i < startOffset; i++) {
             days.push({ empty: true, date: null, month: 0, day: 0 });
           }
 
-          // Every real day of the year
           let cursor = new Date(year, 0, 1);
           while (cursor <= endOfYear) {
             days.push({
@@ -667,14 +706,12 @@
             cursor.setDate(cursor.getDate() + 1);
           }
 
-          // Trailing filler to complete the final week
           while (days.length % 7 !== 0) {
             days.push({ empty: true, date: null, month: 11, day: 0 });
           }
 
           const totalWeeks = days.length / 7;
 
-          // Where does each month start?
           const monthStartInfo = {};
           for (let i = 0; i < days.length; i++) {
             const d = days[i];
@@ -688,7 +725,6 @@
             if (monthStartInfo[m] !== undefined) monthOrder.push(m);
           }
 
-          // How many weeks does each month visually span?
           const monthWeeks = new Array(12).fill(0);
           for (let i = 0; i < monthOrder.length; i++) {
             const m = monthOrder[i];
@@ -713,7 +749,6 @@
           displayYear.textContent = currentYear;
           weeksGrid.innerHTML = "";
 
-          // Compute all layout info for this year
           const info = computeLayout(currentYear);
           layoutInfo = info;
 
@@ -721,10 +756,8 @@
 
           const fragment = document.createDocumentFragment();
 
-          // ----- Build the week columns -----
           const weeksRow = document.createElement("div");
           weeksRow.className = "weeks-row";
-          weeksRow.style.display = "flex";
 
           for (let w = 0; w < totalWeeks; w++) {
             const weekCol = document.createElement("div");
@@ -741,10 +774,8 @@
               } else {
                 cell.textContent = dayInfo.day;
 
-                // Weekend (row d: 0=Mon ... 5=Sat, 6=Sun)
                 if (d === 5 || d === 6) cell.classList.add("weekend");
 
-                // Past / Today
                 if (dayInfo.date < today) {
                   cell.classList.add("past");
                 } else if (
@@ -755,9 +786,6 @@
                   cell.classList.add("today");
                   cell.dataset.today = "true";
                 }
-
-                // Alternate month tint
-                if (dayInfo.month % 2 === 1) cell.classList.add("tint-a");
               }
 
               weekCol.appendChild(cell);
@@ -766,7 +794,6 @@
             weeksRow.appendChild(weekCol);
           }
 
-          // ----- Build the month header row -----
           const monthHeaderRow = document.createElement("div");
           monthHeaderRow.className = "month-header-row";
           monthHeaderRow.style.display = "flex";
@@ -778,7 +805,6 @@
             const header = document.createElement("div");
             header.className = "month-marker-header";
             header.textContent = MONTHS[m];
-            // Initial width uses 44 as placeholder — corrected on next frame
             header.style.width = weeksSpan * 44 + "px";
             header.style.flex = "0 0 auto";
             header.style.boxSizing = "border-box";
@@ -787,7 +813,6 @@
             monthHeaderRow.appendChild(header);
           }
 
-          // ----- Assemble -----
           const gridWrapper = document.createElement("div");
           gridWrapper.style.display = "flex";
           gridWrapper.style.flexDirection = "column";
@@ -798,43 +823,44 @@
 
           weeksGrid.appendChild(fragment);
 
-          // Correct widths after layout & scroll to today
           requestAnimationFrame(() => {
             syncMonthHeaderWidths();
 
-            // Auto-scroll to today (only if viewing the current year)
             if (currentYear === todayYear) {
               const todayCell = weeksGrid.querySelector(".day-cell.today");
               if (todayCell) {
                 const rect = todayCell.getBoundingClientRect();
                 const scrollRect = calendarScroll.getBoundingClientRect();
                 const offset =
-                  rect.left - scrollRect.left + calendarScroll.scrollLeft
-                  - calendarScroll.clientWidth / 2 + rect.width / 2;
+                  rect.left -
+                  scrollRect.left +
+                  calendarScroll.scrollLeft -
+                  calendarScroll.clientWidth / 2 +
+                  rect.width / 2;
                 calendarScroll.scrollLeft = offset;
               }
             } else {
-              // For other years, start from January
               calendarScroll.scrollLeft = 0;
             }
           });
         }
 
-        // Recomputes and applies month header widths using real cell width
         function syncMonthHeaderWidths() {
           if (!layoutInfo) return;
           const headers = weeksGrid.querySelectorAll(".month-marker-header");
           if (!headers.length) return;
 
           const actualCellWidth = getDayCellWidth();
+          // Add 1px for the gap between cells in a week column,
+          // so each month header spans weeks correctly
+          const cellSpan = actualCellWidth + 1;
 
           headers.forEach((h) => {
             const weeksSpan = Number(h.dataset.weeksSpan);
-            h.style.width = weeksSpan * actualCellWidth + "px";
+            h.style.width = weeksSpan * cellSpan + "px";
           });
         }
 
-        // ----- Year navigation -----
         prevYear.addEventListener("click", () => {
           currentYear--;
           renderYear();
@@ -846,12 +872,10 @@
         });
 
         jumpTodayBtn.addEventListener("click", () => {
-          // Reset to current year, then scroll to today
           currentYear = new Date().getFullYear();
           renderYear();
         });
 
-        // ----- Drag to scroll with mouse -----
         let isDown = false;
         let startX = 0;
         let startScrollLeft = 0;
@@ -875,14 +899,12 @@
           calendarScroll.scrollLeft = startScrollLeft - walk;
         });
 
-        // ----- Resize: recalculate month header widths -----
         let resizeTimer;
         window.addEventListener("resize", () => {
           clearTimeout(resizeTimer);
           resizeTimer = setTimeout(syncMonthHeaderWidths, 120);
         });
 
-        // ----- Initial render -----
         renderYear();
       })();
     </script>
